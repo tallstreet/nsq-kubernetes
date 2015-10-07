@@ -1,0 +1,36 @@
+apiVersion: v1
+kind: ReplicationController
+metadata:
+  name: nsq 
+spec:
+  replicas: 1
+  selector:
+    name: nsq
+  template:
+    metadata:
+      labels:
+        name: nsq
+        nsq: "true"
+        role: nsq
+    spec:
+      containers:
+      - name: nsq
+        image: nsqio/nsq
+        command:
+        - /nsqd
+        ports:
+        - containerPort: 4150
+          name: tcp
+          protocol: TCP
+        - containerPort: 4151
+          name: http
+          protocol: TCP
+        resources:
+          limits:
+            cpu: "0.1"
+        volumeMounts:
+        - mountPath: /data
+          name: data
+      volumes:
+        - name: data
+          emptyDir: {}

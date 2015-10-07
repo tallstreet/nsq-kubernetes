@@ -1,0 +1,27 @@
+apiVersion: v1
+kind: ReplicationController
+metadata:
+  name: nsq-lookup
+spec:
+  replicas: 1
+  selector:
+    nsqlookup: "true"
+  template:
+    metadata:
+      labels:
+        name: nsqlookup
+        nsqlookup: "true"
+        role: lookup
+    spec:
+      containers:
+      - name: nsqlookup
+        image: nsqio/nsq
+        command:
+          - /nsqlookupd
+        ports:
+          - containerPort: 4160
+            name: tcp
+            protocol: TCP
+          - containerPort: 4160
+            name: http
+            protocol: TCP
